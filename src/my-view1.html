@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="lazy-import" href="my-change-idiom.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-view1">
@@ -22,30 +23,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <iron-ajax
-    auto
-    url="http://127.0.0.1:8081/data/idiom.js"
-    handle-as="json"
-    last-response="{{response}}"
-  ></iron-ajax>
-
-    <div class="card">
-      <select>
-        <option value="">es</option>
-        <option value="">en</option>
-        <option value="">fr</option>
-        <option value="">de</option>
+    <div class="card" >
+      <select on-idiom-selected="ChangeIdiom">
+        <option value="es">es</option>
+        <option value="en">en</option>
+        <option value="fr">fr</option>
+        <option value="de">de</option>
       </select>
-        <h1>[[response.name]]</h1>
-        <p>[[response.body]]</p>
+        <h1>[[data.title]]</h1>
+        <p>[[data.extract]]</p>
     </div>
+
   </template>
 
   <script>
     class MyView1 extends Polymer.Element {
       static get is() { return 'my-view1'; }
 
-
+      ChangeIdiom(event) {
+        this.set('data', event.detail);
+      }
 
     }
 

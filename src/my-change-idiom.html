@@ -1,0 +1,59 @@
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-change-idiom">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+
+    <iron-ajax
+      auto
+      id="http";
+      url="/data/[[idiom]].json"
+      handle-as="json"
+      on-response="handleResponse"
+      ></iron-ajax>
+
+  <script>
+  class ChangeIdiom extends Polymer.Element {
+    static get is() {
+      return 'my-change-idiom';
+    }
+
+    static get properties() {
+      return {
+        idiom: {
+          type: String,
+          value: '',
+          observer: 'requestContent'
+        },
+        data: {
+          type: Object,
+          value: {}
+        }
+      };
+    }
+
+    handleResponse() {
+      this.set('data', this.$.http.lastResponse);
+      this.dispatchEvent(new CustomEvent('idiom-selected', {
+        bubbles: true,
+        composed: true,
+        detail: this.data
+      }));
+    }
+
+    requestContent() {
+      this.$.http.generateRequest();
+    }
+  }
+
+    window.customElements.define(ChangeIdiom.is, ChangeIdiom);
+  </script>
+</dom-module>
